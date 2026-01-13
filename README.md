@@ -1,2 +1,6 @@
-# nihonnosanzoku-portfolio-V1
-A modern, responsive personal portfolio showcasing my projects, skills, and professional experience.
+# Nihonnosanzoku Portfolio
+
+🚫 Bu repo **public** olsa da, **izinsiz kullanılamaz veya kopyalanamaz**.  
+Her türlü kullanım için yazılı izin gereklidir.
+
+© 2026 Nihonnosanzoku. All Rights Reserved.
