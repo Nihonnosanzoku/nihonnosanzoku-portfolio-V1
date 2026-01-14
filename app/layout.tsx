@@ -13,6 +13,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+
+      </head>
       {/* className kısmına fontu ekleyerek tüm projeye yayıyoruz */}
       <body className={inter.className}>{children}</body>
     </html>
