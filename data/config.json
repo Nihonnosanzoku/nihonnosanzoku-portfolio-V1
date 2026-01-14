@@ -1,0 +1,19 @@
+{
+  "backgrounds": [
+    "/images/anime-fanart.jpg",
+    "/images/CSRHOXrU8AA8dmi.jpg",
+    "/images/fcc-owari-no-seraph.jpg",
+    "/images/HD-wallpaper-anime-jujutsu-kaisen-yuta-okkotsu.jpg",
+    "/images/bg1.jpg",
+    "/images/bg2.jpg",
+    "/images/bg3.jpg",
+    "/images/images.jpg",
+    "/images/5-toubun-no-hanayome-wedding-dress-sakura-blossom-nakano-nino-nakano-miku-hd-wallpaper-preview.jpg",
+    "/images/image_750x500_60bd4efcad7a5.jpg"
+  ],
+  "actions": [
+    { "sound": "/sounds/Yürü-git.opus", "url": "https://www.netflix.com/", "label": "Site Kötü olmuş" },
+    { "sound": "/sounds/Ulan-sende-Bi-sg.opus", "url": "https://youtube.com", "label": "beni Siteye al" },
+    { "sound": "/sounds/Yürü-git-bana-Muhsin_i-bul-bana.opus", "url": "https://www.instagram.com/alliikoksall/", "label": "Kimi bulayım sana?" }
+  ]
+}

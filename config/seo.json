@@ -1,0 +1,27 @@
+{
+  "site": {
+    "name": "Nihon no Sanzoku",
+    "url": "https://nihonnosanzoku.com",
+    "description": "Nihon no Sanzoku – yazılım, web, altyapı ve kişisel projeler.",
+    "locale": "tr_TR"
+  },
+
+  "keywords": [
+    "Nihonnosanzoku",
+    "Nihon no Sanzoku",
+    "portfolio",
+    "next.js",
+    "node.js",
+    "web developer",
+    "full stack developer",
+    "Ali Köksal",
+    "Ali Koksal"
+  ],
+
+  "social": {
+    "twitter": "@nihonnosanzoku",
+    "instagram": "https://instagram.com/alliikoksall",
+    "github": "https://github.com/nihonnosanzoku",
+    "tiktok": "https://www.tiktok.com/@nihonnosanzoku"
+  }
+}
