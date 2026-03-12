@@ -1,35 +1,26 @@
-# Stage 1: Build Next.js app
-FROM node:20-alpine AS builder
-
+# Dockerfile - Next 16 statik build
+FROM node:20-slim AS builder
 WORKDIR /app
 
-# package.json ve package-lock.json kopyala
+# package.json ve lockfile'ı kopyala
 COPY package*.json ./
 
 # Bağımlılıkları yükle
 RUN npm install
 
-# Tüm projeyi kopyala
+# Kaynak kodu kopyala
 COPY . .
 
-# Production build
+# Next build
 RUN npm run build
 
-# Stage 2: Run Next.js app
-FROM node:20-alpine AS runner
-
+# Production image
+FROM node:20-slim
 WORKDIR /app
 
-# Sadece gerekli dosyaları kopyala
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-
-# Portu ayarla
-ENV PORT=3000
+COPY --from=builder /app ./
 
 EXPOSE 3000
 
-# Container başlatıldığında Next.js çalıştır
+# Start Next.js server
 CMD ["npm", "start"]
