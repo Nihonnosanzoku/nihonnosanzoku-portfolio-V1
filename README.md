@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -27,19 +26,32 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Deploy as a Static Site with Docker / Dokploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 1️⃣ Build Docker Image
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Nihonnosanzoku Portfolio
+```bash
+docker build -t nihonnosanzoku-static .
+```
 
-🚫 Bu repo **public** olsa da, **izinsiz kullanılamaz veya kopyalanamaz**.  
-Her türlü kullanım için yazılı izin gereklidir.
+### 2️⃣ Run Locally
 
-© 2026 Nihonnosanzoku. All Rights Reserved.
->>>>>>> 81f4f90b55100e5ba0ac7492c02964e98d2d4415
+```bash
+docker run -p 80:80 nihonnosanzoku-static
+```
+
+Then open [http://localhost](http://localhost) in your browser to check everything works.
+
+### 3️⃣ Deploy on Dokploy
+
+- Dokploy automatically builds and deploys your site.  
+- Ensure your Nginx port mapping is set to **80**.  
+- For domain setup via Cloudflare:
+  - Add an **A record** pointing to your server IP.
+  - Optionally, add a **CNAME** for `www` to redirect to the main domain.
+
+This setup serves your Next.js app as a **fully static site** via Nginx.
