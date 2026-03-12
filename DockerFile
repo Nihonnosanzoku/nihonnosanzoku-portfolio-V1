@@ -1,26 +1,23 @@
-# Dockerfile - Next 16 statik build
-FROM node:20-slim AS builder
+# Build stage
+FROM node:24-bullseye AS builder
+
 WORKDIR /app
 
-# package.json ve lockfile'ı kopyala
 COPY package*.json ./
-
-# Bağımlılıkları yükle
 RUN npm install
 
-# Kaynak kodu kopyala
 COPY . .
 
-# Next build
 RUN npm run build
 
-# Production image
-FROM node:20-slim
+
+# Production stage
+FROM node:24-bullseye
+
 WORKDIR /app
 
 COPY --from=builder /app ./
 
 EXPOSE 3000
 
-# Start Next.js server
 CMD ["npm", "start"]
