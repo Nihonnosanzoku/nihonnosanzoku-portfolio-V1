@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { playSoundAndRedirect } from "@/lib/utils";
-import { getRandomConstructionAction } from "@/server/actions/construction.actions";
+import { getRandomVoice } from "@/server/actions/voice.actions";
 
 interface ActionItem {
   sound: string;
@@ -18,7 +18,7 @@ export default function ActionButton() {
   useEffect(() => {
     const frame = requestAnimationFrame(async () => {
       setMounted(true);
-      const randomAction = await getRandomConstructionAction();
+      const randomAction = await getRandomVoice();
       if (randomAction) {
         setAction({
           sound: randomAction.sound,
