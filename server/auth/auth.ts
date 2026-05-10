@@ -15,7 +15,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       
       const adminDiscordId = process.env.ADMIN_DISCORD_ID?.replace(/['"]/g, '');
-      const isMainAdmin = profile?.id && profile.id === adminDiscordId;
+      const discordId = profile?.id?.toString() || account?.providerAccountId?.toString();
+      const isMainAdmin = !!adminDiscordId && discordId === adminDiscordId;
       
       const email = user.email.toLowerCase();
       let existingUser = await authRepository.findUserByEmail(email);
@@ -74,7 +75,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           existingUser.id,
           user.name || existingUser.name || '',
           user.image || existingUser.image || '',
-          (profile?.id as string) || existingUser.discordId || '',
+          (profile?.id?.toString()) || (account?.providerAccountId?.toString()) || existingUser.discordId || '',
           globalName || undefined,
           avatarDecoration || undefined
         );

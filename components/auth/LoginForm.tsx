@@ -26,6 +26,9 @@ export default function LoginForm({ signInAction, siteKey }: LoginFormProps) {
     try {
       await signInAction(token);
     } catch (err: any) {
+      // Important: Next.js redirect() throws an error that should not be caught
+      if (err.message === 'NEXT_REDIRECT') throw err;
+      
       setError(err.message || "Giriş yapılırken bir hata oluştu.");
       setIsPending(false);
     }
