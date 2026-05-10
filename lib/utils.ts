@@ -20,3 +20,8 @@ export const playSoundAndRedirect = async (
     onEnd();
   }
 };
+
+export const isVideo = (url: string) => {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.m4v'];
+    return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+};

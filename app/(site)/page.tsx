@@ -14,7 +14,10 @@ import ConnectSection from '@/components/main/ConnectSection';
 import ReposSection from '@/components/main/ReposSection';
 import TechSection from '@/components/main/TechSection';
 import BlogSection from '@/components/main/BlogSection';
+import QuickActions from '@/components/main/QuickActions';
 import { getRandomVoice } from '@/server/actions/voice.actions';
+import { addGalleryItem, addBlogPost } from '@/server/actions/home.actions';
+import RoleRepository from '@/server/roles/role.repository';
 
 export const metadata: Metadata = {
   title: 'Nihonnosanzoku | Portfolio',
@@ -36,6 +39,8 @@ export default async function Home() {
   const adminProfile = await authRepository.getAdminProfile();
   const siteSettings = await settingsRepository.getGlobalSettings();
   const randomVoice = await getRandomVoice();
+  const roleRepository = new RoleRepository();
+  const roles = await roleRepository.getAllRoles();
 
   // Dynamic Github Username extraction
   const githubLink = siteSettings?.githubLink || "https://git hub.com/erslly";
@@ -123,6 +128,18 @@ export default async function Home() {
           </div>
 
           <ConnectSection />
+          
+          {isAdmin && (
+            <div className="rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 backdrop-blur-2xl shadow-2xl">
+              <h3 className="text-xl font-black text-white mb-2 tracking-tighter uppercase italic">Admin Aksiyonları</h3>
+              <p className="text-[10px] text-white/30 uppercase tracking-widest font-black mb-6">Hızlı İçerik Ekle</p>
+              <QuickActions 
+                roles={roles} 
+                addImageAction={addGalleryItem} 
+                addPostAction={addBlogPost}
+              />
+            </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN */}

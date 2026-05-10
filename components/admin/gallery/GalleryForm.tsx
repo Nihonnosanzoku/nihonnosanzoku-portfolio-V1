@@ -27,6 +27,7 @@ export default function GalleryForm({ action, initialData, roles, onSuccess }: G
   const formRef = useRef<HTMLFormElement>(null);
 
   const [state, submitAction, isPending] = useActionState(async (prevState: any, formData: FormData) => {
+    console.log('[GalleryForm] Submit started');
     try {
       if (initialData?.id) {
         formData.append('id', initialData.id);
@@ -36,9 +37,14 @@ export default function GalleryForm({ action, initialData, roles, onSuccess }: G
         formData.append('allowedRoles', roleId);
       });
 
+      console.log('[GalleryForm] FormData keys:', Array.from(formData.keys()));
+      console.log('[GalleryForm] Upload type:', uploadType);
+
       await action(formData);
+      console.log('[GalleryForm] Action completed successfully');
       return { success: true, error: null };
     } catch (e: any) {
+      console.error('[GalleryForm] Action failed:', e);
       return { success: false, error: e.message || "Bir hata oluştu." };
     }
   }, { success: false, error: null });
@@ -68,7 +74,11 @@ export default function GalleryForm({ action, initialData, roles, onSuccess }: G
         {initialData ? 'Medyayı Düzenle' : 'Yeni Medya Ekle'}
       </h2>
       
-      <form ref={formRef} action={submitAction} className="space-y-6 relative z-10">
+      <form 
+        ref={formRef} 
+        action={submitAction} 
+        className="space-y-6 relative z-10"
+      >
         {state.error && <p className="text-red-500 text-sm font-medium">{state.error}</p>}
 
         {/* Toggle UI */}

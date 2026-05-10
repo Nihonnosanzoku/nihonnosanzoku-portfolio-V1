@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Trash2, Plus, X, PenBox, Image as ImageIcon } from 'lucide-react';
 import GalleryForm from './GalleryForm';
+import { isVideo } from '@/lib/utils';
 
 interface GalleryManagerProps {
   images: any[];
@@ -59,11 +60,22 @@ export default function GalleryManager({ images, roles, addImageAction, updateIm
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {images.map((img: any) => (
           <div key={img.id} className="relative group rounded-3xl overflow-hidden aspect-square w-full border border-white/10 shadow-2xl bg-white/[0.02]">
-            <img 
-              src={img.url} 
-              alt={img.alt || 'Gallery image'} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
+            {isVideo(img.url) ? (
+                <video 
+                  src={img.url} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  muted
+                  loop
+                  onMouseOver={(e) => (e.target as HTMLVideoElement).play()}
+                  onMouseOut={(e) => (e.target as HTMLVideoElement).pause()}
+                />
+            ) : (
+                <img 
+                  src={img.url} 
+                  alt={img.alt || 'Gallery image'} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+            )}
             
             {/* Overlay */}
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">

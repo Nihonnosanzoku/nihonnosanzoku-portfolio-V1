@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { X, Download, Maximize2, ExternalLink } from 'lucide-react';
 
+import { isVideo } from '@/lib/utils';
+
 interface GalleryImage {
   id: string;
   url: string;
@@ -47,15 +49,26 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
             className="break-inside-avoid relative group overflow-hidden rounded-3xl border border-white/10 bg-black/50 cursor-zoom-in shadow-lg"
             onClick={() => setSelectedImage(img)}
           >
-            <Image 
-              src={img.url} 
-              alt={img.alt || 'Gallery Image'} 
-              width={800}
-              height={1000}
-              quality={95}
-              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
-              loading="lazy"
-            />
+            {isVideo(img.url) ? (
+                <video 
+                  src={img.url} 
+                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                />
+            ) : (
+                <Image 
+                  src={img.url} 
+                  alt={img.alt || 'Gallery Image'} 
+                  width={800}
+                  height={1000}
+                  quality={95}
+                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  loading="lazy"
+                />
+            )}
             
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform">
@@ -119,6 +132,14 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
           {/* Image Container */}
           <div className={`relative z-10 flex-1 flex items-center justify-center p-2 md:p-10 overflow-auto scrollbar-hide ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`} onClick={() => !isZoomed && setIsZoomed(true)}>
             <div className={`transition-all duration-500 ease-out flex items-center justify-center ${isZoomed ? 'min-w-full min-h-full' : 'w-full h-full'}`}>
+              {isVideo(selectedImage.url) ? (
+                <video 
+                  src={selectedImage.url} 
+                  controls
+                  autoPlay
+                  className={`max-w-none transition-all duration-500 ${isZoomed ? 'w-auto h-auto' : 'w-full h-full object-contain'}`}
+                />
+              ) : (
                 <img 
                     src={selectedImage.url} 
                     alt={selectedImage.alt || ''} 
@@ -130,6 +151,7 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
                         }
                     }}
                 />
+              )}
             </div>
           </div>
         </div>
