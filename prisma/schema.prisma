@@ -90,3 +90,11 @@ model TechStack {
   color     String?
   createdAt DateTime @default(now())
 }
+
+model Voice {
+  id        String   @id @default(cuid())
+  sound     String   
+  url       String   
+  label     String   
+  createdAt DateTime @default(now())
+}

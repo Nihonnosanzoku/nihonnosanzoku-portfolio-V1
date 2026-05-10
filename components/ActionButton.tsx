@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import config from "@/data/config.json";
-import { getRandomItem, playSoundAndRedirect } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { playSoundAndRedirect } from "@/lib/utils";
+import { getRandomConstructionAction } from "@/server/actions/construction.actions";
 
 interface ActionItem {
   sound: string;
@@ -13,18 +13,22 @@ interface ActionItem {
 export default function ActionButton() {
   const [isActing, setIsActing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [action, setAction] = useState<ActionItem | null>(null);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
+    const frame = requestAnimationFrame(async () => {
       setMounted(true);
+      const randomAction = await getRandomConstructionAction();
+      if (randomAction) {
+        setAction({
+          sound: randomAction.sound,
+          url: randomAction.url,
+          label: randomAction.label
+        });
+      }
     });
     return () => cancelAnimationFrame(frame);
   }, []);
-
-  const action = useMemo(() => {
-    if (!mounted || !config.actions.length) return null;
-    return getRandomItem(config.actions) as ActionItem;
-  }, [mounted]);
 
   const handleClick = async () => {
     if (!action || isActing) return;

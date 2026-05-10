@@ -14,6 +14,7 @@ import ConnectSection from '@/components/main/ConnectSection';
 import ReposSection from '@/components/main/ReposSection';
 import TechSection from '@/components/main/TechSection';
 import BlogSection from '@/components/main/BlogSection';
+import { getRandomVoice } from '@/server/actions/voice.actions';
 
 export const metadata: Metadata = {
   title: 'Nihonnosanzoku | Portfolio',
@@ -26,7 +27,7 @@ const authRepository = new AuthRepository();
 const settingsRepository = new SettingsRepository();
 const techRepository = new TechRepository();
 
-export const revalidate = 60; // 1 min ISR
+export const revalidate = 0; // Disable caching for now to ensure random action works on every load
 
 export default async function Home() {
   const session = await auth();
@@ -34,6 +35,7 @@ export default async function Home() {
   
   const adminProfile = await authRepository.getAdminProfile();
   const siteSettings = await settingsRepository.getGlobalSettings();
+  const randomVoice = await getRandomVoice();
 
   // Dynamic Github Username extraction
   const githubLink = siteSettings?.githubLink || "https://git hub.com/erslly";
@@ -95,7 +97,11 @@ export default async function Home() {
 
         {/* LEFT COLUMN */}
         <div className="lg:col-span-4 flex flex-col gap-8">
-          <HeroSection adminProfile={adminProfile} siteSettings={siteSettings} />
+          <HeroSection 
+            adminProfile={adminProfile} 
+            siteSettings={siteSettings} 
+            randomVoice={randomVoice} 
+          />
           
           {/* Quick Links Card */}
           <div className="rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 backdrop-blur-2xl shadow-2xl">

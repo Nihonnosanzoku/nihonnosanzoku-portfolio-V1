@@ -6,9 +6,10 @@ import { Github, Terminal, AppWindow } from 'lucide-react';
 interface HeroSectionProps {
   adminProfile: any;
   siteSettings: any;
+  randomVoice: any;
 }
 
-export default function HeroSection({ adminProfile, siteSettings }: HeroSectionProps) {
+export default function HeroSection({ adminProfile, siteSettings, randomVoice }: HeroSectionProps) {
   return (
     <div className="rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 backdrop-blur-2xl relative overflow-hidden group shadow-2xl animate-in slide-in-from-top-8 duration-1000">
       <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[80px] -mr-10 -mt-10 transition-transform duration-1000 group-hover:scale-150 animate-pulse-slow"></div>
@@ -68,14 +69,14 @@ export default function HeroSection({ adminProfile, siteSettings }: HeroSectionP
         </Link>
 
         <SoundLink 
-          href="#" 
-          soundSrc="/sounds/Yürü-git.opus" 
+          href={randomVoice?.url || "#"} 
+          soundSrc={randomVoice?.sound || "/sounds/Yürü-git.opus"} 
           external 
-          delay={1200}
+          delay={1500}
           className="group relative text-[11px] font-black uppercase tracking-widest text-purple-400 bg-purple-900/20 px-6 py-3 rounded-2xl border border-purple-500/30 hover:bg-purple-900/40 hover:text-purple-300 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.1)] overflow-hidden"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-          Eski Site ↗
+          {randomVoice?.label || "Eski Site"} ↗
         </SoundLink>
       </div>
     </div>
