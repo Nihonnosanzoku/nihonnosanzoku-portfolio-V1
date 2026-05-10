@@ -1,10 +1,13 @@
 [phases.setup]
-nixPkgs = ["...", "yt-dlp", "ffmpeg", "python3", "curl"]
-
-[phases.build]
-dependsOn = ["setup"]
-cmds = ["npm run build"]
+nixPkgs = ["...", "yt-dlp", "ffmpeg", "python3", "curl", "openssl"]
 
 [phases.install]
 dependsOn = ["setup"]
-cmds = ["npm install"]
+cmds = ["pnpm install"]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["pnpm exec prisma generate", "pnpm run build"]
+
+[start]
+cmd = "pnpm run start"
