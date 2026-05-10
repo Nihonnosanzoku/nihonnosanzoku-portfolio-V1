@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["node", "openssl"]
+
+[phases.build]
+cmds = ["npm install", "npx prisma generate", "npm run build", "cp -r public .next/standalone/public || true", "cp -r .next/static .next/standalone/.next/static || true"]
+
+[start]
+cmd = "node .next/standalone/server.js"
