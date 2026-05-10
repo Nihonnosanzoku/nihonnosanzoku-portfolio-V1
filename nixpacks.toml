@@ -1,5 +1,14 @@
+[phases.setup]
+nixPkgs = ["nodejs_24", "pnpm"]
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile"]
+
 [phases.build]
-cmds = ["npm install", "npx prisma generate", "npm run build", "cp -r public .next/standalone/public || true", "cp -r .next/static .next/standalone/.next/static || true"]
+cmds = [
+  "pnpm prisma generate",
+  "pnpm run build"
+]
 
 [start]
 cmd = "node .next/standalone/server.js"
