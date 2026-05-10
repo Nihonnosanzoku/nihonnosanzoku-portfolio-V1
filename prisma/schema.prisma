@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(cuid())
+  discordId        String?   @unique
+  name             String?
+  email            String?   @unique
+  image            String?
+  globalName       String?
+  avatarDecoration String?
+  lastStatus       String?
+  role             Role      @default(USER)
+  isApproved       Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  posts            Post[]
+  roles            UserRole[] @relation("UserToRole")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String
+  published Boolean  @default(false)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Song {
+  id        String   @id @default(cuid())
+  title     String
+  artist    String
+  link      String
+  coverUrl  String?
+  videoUrl  String?
+  platform  String   @default("Spotify")
+  createdAt DateTime @default(now())
+}
+
+model UserRole {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  users       User[]    @relation("UserToRole")
+  gallery     Gallery[] @relation("GalleryToRole")
+  createdAt   DateTime  @default(now())
+}
+
+model Gallery {
+  id           String     @id @default(cuid())
+  url          String
+  alt          String?
+  allowedRoles UserRole[] @relation("GalleryToRole")
+  createdAt    DateTime   @default(now())
+}
+
+model SiteSettings {
+  id          String   @id @default("global") // We only need one global record
+  heroTitle   String   @default("Front-End Developer")
+  heroBio     String   @default("Hi 👋, my name is undefined. I am a software developer.")
+  githubLink  String   @default("https://github.com")
+  discordLink String   @default("https://discord.com")
+  spotifyLink String   @default("https://spotify.com")
+  anilistLink String   @default("https://anilist.co")
+  updatedAt   DateTime @updatedAt
+}
+
+model TechStack {
+  id        String   @id @default(cuid())
+  name      String
+  iconName  String?  @default("Code2")
+  iconSvg   String?  @db.Text
+  color     String?
+  createdAt DateTime @default(now())
+}
