@@ -1,17 +1,10 @@
 [phases.setup]
-nixPkgs = ["nodejs_24", "pnpm"]
-
-[phases.install]
-cmds = ["pnpm install --frozen-lockfile"]
+nixPkgs = ["...", "yt-dlp", "ffmpeg", "python3", "curl"]
 
 [phases.build]
-cmds = [
-  "pnpm prisma generate",
-  "pnpm prisma db push --accept-data-loss",
-  "pnpm run build",
-  "cp -r public .next/standalone/public || true",
-  "cp -r .next/static .next/standalone/.next/static || true"
-]
+dependsOn = ["setup"]
+cmds = ["npm run build"]
 
-[start]
-cmd = "node .next/standalone/server.js"
+[phases.install]
+dependsOn = ["setup"]
+cmds = ["npm install"]

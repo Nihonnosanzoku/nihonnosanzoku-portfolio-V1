@@ -19,7 +19,19 @@ export default class DownloadService {
     const command = `yt-dlp --user-agent "${userAgent}" --no-check-certificate --no-playlist -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputTemplate}" "${url}"`;
 
     try {
-      await execAsync(command);
+      console.log(`[Download] Executing: ${command}`);
+      
+      // Verification log to check if yt-dlp is reachable
+      try {
+        const { stdout: whichOut } = await execAsync('which yt-dlp');
+        console.log(`[System] yt-dlp path: ${whichOut.trim()}`);
+      } catch (e) {
+        console.warn('[System Warning] yt-dlp not found in PATH via which');
+      }
+
+      await execAsync(command, {
+        env: { ...process.env, LANG: 'en_US.UTF-8' }
+      });
       
       const files = fs.readdirSync(downloadDir);
       const downloadedFile = files.find(f => f.startsWith(uniqueId));

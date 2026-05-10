@@ -21,8 +21,20 @@ export class DownloadService {
     const command = `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputTemplate}" "${url}"`;
 
     try {
+      console.log(`[Download] Executing: ${command}`);
+      
+      // Verification log to check if yt-dlp is reachable
+      try {
+        const { stdout: whichOut } = await execAsync('which yt-dlp');
+        console.log(`[System] yt-dlp path: ${whichOut.trim()}`);
+      } catch (e) {
+        console.warn('[System Warning] yt-dlp not found in PATH via which');
+      }
+
       // Execute yt-dlp on the system
-      await execAsync(command);
+      await execAsync(command, {
+        env: { ...process.env, LANG: 'en_US.UTF-8' }
+      });
       
       // Because we requested mp4 or best fallback, we assume .mp4 for simplicity,
       // but in production we can parse the stdout to get the exact filename yt-dlp saved.
