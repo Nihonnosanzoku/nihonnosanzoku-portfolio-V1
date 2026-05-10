@@ -16,21 +16,26 @@ export default class DownloadService {
     const outputTemplate = path.join(downloadDir, `${uniqueId}.%(ext)s`);
 
     const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-    const command = `yt-dlp --user-agent "${userAgent}" --no-check-certificate --no-playlist -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputTemplate}" "${url}"`;
+    
+    // Hardened command with geo-bypass and localized headers
+    const command = [
+      'yt-dlp',
+      `--user-agent "${userAgent}"`,
+      '--no-check-certificate',
+      '--no-playlist',
+      '--geo-bypass',
+      '--geo-bypass-country TR',
+      '--add-header "Accept-Language: tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7"',
+      '-f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"',
+      `-o "${outputTemplate}"`,
+      `"${url}"`
+    ].join(' ');
 
     try {
-      console.log(`[Download] Executing: ${command}`);
+      console.log(`[Download] Hardened Execution: ${command}`);
       
-      // Verification log to check if yt-dlp is reachable
-      try {
-        const { stdout: whichOut } = await execAsync('which yt-dlp');
-        console.log(`[System] yt-dlp path: ${whichOut.trim()}`);
-      } catch (e) {
-        console.warn('[System Warning] yt-dlp not found in PATH via which');
-      }
-
       await execAsync(command, {
-        env: { ...process.env, LANG: 'en_US.UTF-8' }
+        env: { ...process.env, LANG: 'tr_TR.UTF-8' }
       });
       
       const files = fs.readdirSync(downloadDir);
@@ -60,8 +65,12 @@ export default class DownloadService {
       const errorStr = error.toString();
       if (errorStr.includes('Log in for access') || errorStr.includes('This post may not be comfortable')) {
         errorMessage = 'Bu video yaş kısıtlamalı veya giriş gerektiriyor. Maalesef bu tür videoları şu an indiremiyoruz.';
+      } else if (errorStr.includes('not available in your country') || errorStr.includes('Geo-restriction')) {
+        errorMessage = 'Bu video Türkiye bölgesinde kısıtlanmış veya sunucu IP adresi YouTube tarafından engellenmiş. Lütfen daha sonra tekrar deneyin.';
       } else if (errorStr.includes('ExtractorError')) {
-        errorMessage = 'Video platformu tarafından erişim engellendi. Lütfen daha sonra tekrar deneyin.';
+        errorMessage = 'Video platformu tarafından erişim engellendi veya video kaldırıldı.';
+      } else if (errorStr.includes('HTTP Error 429') || errorStr.includes('Too Many Requests')) {
+        errorMessage = 'Sunucu çok fazla istek gönderdiği için YouTube tarafından geçici olarak engellendi. Bir süre bekleyin.';
       }
 
       throw new Error(errorMessage);

@@ -18,22 +18,26 @@ export class DownloadService {
     const outputTemplate = path.join(downloadDir, `${uniqueId}.%(ext)s`);
 
     // 3. Command to download via yt-dlp prioritizing mp4
-    const command = `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputTemplate}" "${url}"`;
+    const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    const command = [
+      'yt-dlp',
+      `--user-agent "${userAgent}"`,
+      '--no-check-certificate',
+      '--no-playlist',
+      '--geo-bypass',
+      '--geo-bypass-country TR',
+      '--add-header "Accept-Language: tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7"',
+      '-f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"',
+      `-o "${outputTemplate}"`,
+      `"${url}"`
+    ].join(' ');
 
     try {
-      console.log(`[Download] Executing: ${command}`);
+      console.log(`[Download] Hardened Execution: ${command}`);
       
-      // Verification log to check if yt-dlp is reachable
-      try {
-        const { stdout: whichOut } = await execAsync('which yt-dlp');
-        console.log(`[System] yt-dlp path: ${whichOut.trim()}`);
-      } catch (e) {
-        console.warn('[System Warning] yt-dlp not found in PATH via which');
-      }
-
       // Execute yt-dlp on the system
       await execAsync(command, {
-        env: { ...process.env, LANG: 'en_US.UTF-8' }
+        env: { ...process.env, LANG: 'tr_TR.UTF-8' }
       });
       
       // Because we requested mp4 or best fallback, we assume .mp4 for simplicity,

@@ -1,9 +1,9 @@
 [phases.setup]
-nixPkgs = ["...", "yt-dlp", "ffmpeg", "python3", "curl", "openssl"]
+nixPkgs = ["...", "ffmpeg", "python3", "curl", "openssl"]
 
 [phases.install]
 dependsOn = ["setup"]
-cmds = ["pnpm install"]
+cmds = ["python3 -m pip install -U yt-dlp", "pnpm install"]
 
 [phases.build]
 dependsOn = ["install"]
