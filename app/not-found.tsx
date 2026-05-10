@@ -6,14 +6,20 @@ import { Home } from 'lucide-react';
 
 export default async function NotFound() {
   // Fetch some public images for the background
-  const images = await prisma.gallery.findMany({
-    take: 10,
-    orderBy: { createdAt: 'desc' }
-  });
+  let imageUrls = ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920'];
   
-  const imageUrls = images.length > 0 
-    ? images.map(img => img.url) 
-    : ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920'];
+  try {
+    const images = await prisma.gallery.findMany({
+      take: 10,
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    if (images.length > 0) {
+      imageUrls = images.map(img => img.url);
+    }
+  } catch (error) {
+    console.warn("[Build/Runtime] NotFound: Could not fetch gallery images from DB, using fallback.");
+  }
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
